@@ -1,0 +1,45 @@
+SUMMARY="A simple tool for reading scripture on Haiku"
+DESCRIPTION="This library provides a simplified interface to the SWORD project."
+HOMEPAGE="https://vance.fish/git/libbible"
+SOURCE_URI="https://vance.fish/git/libbible/snapshot/libbible-1.0.4.tar.gz"
+CHECKSUM_SHA256="4ed00b0b90dc63b4fc700512fc1956c8a5f34bac3f23ec1ec7d2af04b54e4cfc"
+LICENSE="GNU GPL v3"
+COPYRIGHT="2022 Nathan Vance"
+REVISION="1"
+
+ARCHITECTURES="all"
+
+PROVIDES="
+	libbible = $portVersion
+	cmd:bible = $portVersion
+	lib:libbible = $portVersion
+	"
+
+REQUIRES="
+	haiku
+	sword
+	minizip
+	zlib
+	"
+
+BUILD_REQUIRES="
+	haiku_devel
+	sword_devel
+	minizip_devel
+	zlib_devel
+	cmd:make
+	cmd:pkg_config
+	cmd:g++
+	"
+
+BUILD()
+{
+	make $jobArgs
+}
+
+INSTALL()
+{
+	make completions=$datadir/data/bash-completion/completions/ datadir=$dataDir libdir=$libDir bindir=$binDir includedir=$includeDir install
+	# We don't want everything...
+	rm $libDir/libbible.a
+}
